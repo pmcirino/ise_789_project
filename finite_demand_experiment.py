@@ -48,15 +48,15 @@ inst.file_name = 'two_item_pi'
 inst.policy_optimization()
 
 # Two product Q Learning w2 #
-td = TemporalDifference(two_product, 0.01, 0.8, 0.999,1000000, 'q_learning_reaction', w2=4)
-td.q_learning()
+#td = TemporalDifference(two_product, 0.01, 0.8, 0.999,1000000, 'q_learning_reaction', w2=4)
+#td.q_learning()
 # Two Product Regular #
-td = TemporalDifference(two_product, 0.01, 0.8, 0.999,1000000, 'q_learning')
-td.q_learning()
+#td = TemporalDifference(two_product, 0.01, 0.8, 0.999,1000000, 'q_learning')
+#td.q_learning()
 
 # Two product MC w2 #
-mc = McPolicyIteration(two_product,100000,10,0.99,0.8,name='mc_pi_reaction',w2=4)
-mc.policy_iteration()
+#mc = McPolicyIteration(two_product,100000,10,0.99,0.8,name='mc_pi_reaction',w2=4)
+#mc.policy_iteration()
 # Two Product MC #
-mc = McPolicyIteration(two_product,100000,10,0.99,0.8,name='mc_pi')
-mc.policy_iteration()
+#mc = McPolicyIteration(two_product,100000,10,0.99,0.8,name='mc_pi')
+#mc.policy_iteration()

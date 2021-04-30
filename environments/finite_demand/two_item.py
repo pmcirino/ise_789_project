@@ -214,7 +214,7 @@ class TwoItem():
         for d1 in range(I1 + 1):
             for d2 in range(I2 + 1):
                 probability = self.get_probability(d1, 1) * self.get_probability(d2, 2)
-                cost += self.theta[0] * max(x1 - d1, 0) + self.theta[1] * max(x2, d2,0) * probability  # expiration cost
+                cost += (self.theta[0] * max(x1 - d1, 0) + self.theta[1] * max(x2, d2,0)) * probability  # expiration cost
                 cost += (self.h[0] * min(y1, I1 - d1) + self.h[1] * min(y2, I2 - d1)) * probability  # holding cost
                 revenue += (d1 * self.p[0] + d2 * self.p[1]) * probability
 

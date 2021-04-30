@@ -14,9 +14,9 @@ def save_results(name, results):
     np.save(value_path, np.array(results['values']))
 
 def open_actions(name):
-    actions = np.load(os.path.join(ACTION_PATH, f'{name}.npy'))
+    actions = np.load(os.path.join(ACTION_PATH, f'{name}'))
     return actions
 
 def open_values(name):
-    values = np.load(os.path.join(VALUE_PATH, f'{name}.npy'))
+    values = np.load(os.path.join(VALUE_PATH, f'{name}'))
     return values

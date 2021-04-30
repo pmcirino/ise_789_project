@@ -1,18 +1,10 @@
 import numpy as np
 from tqdm import tqdm
 from environments.finite_demand import two_item
-DEMAND_VALUES = np.array([np.arange(8), np.array([0,1,2,3,4])])
-DEMAND_PROB = np.array([np.array([1/8]*8),np.array([0.2]*5)])
-print(DEMAND_VALUES.shape)
-h = np.array([1,1])
-b = np.array([1,1])
-p = np.array([15,15])
-c = np.array([1,1])
-theta = np.array([8,1])
-gammas = np.array([.1, .8])
-
+from output_files.save_outputs import save_results
+from environments.infinte_demand.two_item import TwoItem
 class PolicyIteration():
-    def __init__(self, multi_product_instance,epsilon, alpha):
+    def __init__(self, multi_product_instance,epsilon, alpha, name):
         self.inv_instance = multi_product_instance
         self.action_space = multi_product_instance.actions
         self.value_space = multi_product_instance.values
@@ -24,6 +16,7 @@ class PolicyIteration():
         self.x2_max = int(np.nanmax(self.value_space[0, 1:]))
         self.expected_cost = multi_product_instance.calculate_expected_profits()
         self.initial_policy = np.zeros([2]+multi_product_instance.actions_dimensions)
+        self.file_name = name
         for x1 in range(self.x1_min,self.x1_max+1):
             for x2 in range(self.x2_min,self.x2_max+1):
                 if x1 < 0:
@@ -86,6 +79,8 @@ class PolicyIteration():
             condition = np.array_equal(pi_n[iteration][0], pi_n[iteration - 1][0]) and \
                         np.array_equal(pi_n[iteration][1], pi_n[iteration - 1][1])
             print(iteration)
+        result = {'values':v_n[-1],'policy':pi_n[-1]}
+        save_results(self.file_name,result)
         return {'values':v_n,'policy':pi_n}
 
     def reaction_policy_iteration(self, w2):
@@ -100,9 +95,7 @@ class PolicyIteration():
                     candidates = np.zeros([self.x1_max - x1 + 1, self.x2_max - x2 + 1])
                     state_index = [x1 + self.x1_max + 1, x2 + self.x2_max + 1]
                     for y1 in range(max(0, -x1), self.x1_max - x1 + 1):
-                        y2 = 0
-                        if x2<w2:
-                            y2 = w2 - x2
+                        y2 = max(w2-x2,0)
                         action = [y1, y2]
                         total_cost = self.expected_cost[tuple(action + state_index)] + \
                                      self.alpha * self.inv_instance.calculate_expected_future_profits(
@@ -114,7 +107,7 @@ class PolicyIteration():
                     index_0 = [0, x1 + self.x1_max, x2 + self.x2_max]
                     index_1 = [1, x1 + self.x1_max, x2 + self.x2_max]
                     new_pi[tuple(index_0)] = opt[0]
-                    new_pi[tuple(index_1)] = opt[1]
+                    new_pi[tuple(index_1)] = max(w2-x2,0)
             pi_n.append(new_pi)
             print(new_pi)
             iteration += 1
@@ -122,16 +115,8 @@ class PolicyIteration():
             condition = np.array_equal(pi_n[iteration][0], pi_n[iteration - 1][0]) and \
                         np.array_equal(pi_n[iteration][1], pi_n[iteration - 1][1])
             print(iteration)
+        result = {'values':v_n[-1],'policy':pi_n[-1]}
+        save_results(self.file_name,result)
         return {'values': v_n, 'policy': pi_n}
 
 
-
-
-
-test = two_item.TwoItem(DEMAND_VALUES,DEMAND_PROB, h, b, p, c, theta, gammas)
-
-pi = PolicyIteration(test, 0.01, 0.9)
-test2 = pi.reaction_policy_iteration(1)
-np.printoptions(supress=True)
-print(test2['values'][-1])
-print(test2['policy'][-1])

@@ -18,21 +18,21 @@ w_2= 9
 two_product = two_item_poisson.TwoItem(demand_rates=demand_rate,max_demand=max_demand,
                                       h=h,b=b,p=p,c=c,theta=theta,substitution_rates=gammas)
 
-get_two = single_poisson.SingleItem(demand_rate=demand_rate[1],max_demand=max_demand,h=h[1],
-                                    b=b[1],p=p[1],c=c[1],theta=theta[1])
-inst = PolicyIteration(get_two,0.01,0.8, 'poisson_w2_run')
-test = inst.policy_optimization()
+#get_two = single_poisson.SingleItem(demand_rate=demand_rate[1],max_demand=max_demand,h=h[1],
+                                   # b=b[1],p=p[1],c=c[1],theta=theta[1])
+#inst = PolicyIteration(get_two,0.01,0.8, 'poisson_w2_run')
+#test = inst.policy_optimization()
 
 # Two product Q Learning w2 #
-td = TemporalDifference(two_product, 0.01, 0.8, 0.9999,10000000, 'poisson_q_learning_reaction', w2=9)
+td = TemporalDifference(two_product, 0.0001, 0.8, 0.9999,10000000, 'poisson_q_learning_reaction', w2=9)
 td.q_learning()
 # Two Product Regular #
-td = TemporalDifference(two_product, 0.01, 0.8, 0.9999,10000000, 'poisson_q_learning')
+td = TemporalDifference(two_product, 0.0001, 0.8, 0.9999,10000000, 'poisson_q_learning')
 td.q_learning()
 
 # Two product MC w2 #
-mc = McPolicyIteration(two_product,100000,100,0.999,0.8,name='poisson_mc_pi_reaction',w2=4)
-mc.policy_iteration()
+#mc = McPolicyIteration(two_product,100000,100,0.999,0.8,name='poisson_mc_pi_reaction',w2=4)
+#mc.policy_iteration()
 # Two Product MC #
-mc = McPolicyIteration(two_product,100000,100,0.999,0.8,name='poisson_mc_pi')
-mc.policy_iteration()
+#mc = McPolicyIteration(two_product,100000,100,0.999,0.8,name='poisson_mc_pi')
+#mc.policy_iteration()
